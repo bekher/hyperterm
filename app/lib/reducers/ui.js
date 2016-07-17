@@ -53,6 +53,7 @@ const initial = Immutable({
   },
   foregroundColor: '#fff',
   backgroundColor: '#000',
+  audibleBell: true,
   updateVersion: null,
   updateNotes: null
 });
@@ -114,6 +115,10 @@ const reducer = (state = initial, action) => {
           if (state.colors.toString() !== config.colors.toString()) {
             ret.colors = config.colors;
           }
+        }
+
+        if (null != config.audibleBell) {
+          ret.audibleBell = config.audibleBell;
         }
 
         return ret;

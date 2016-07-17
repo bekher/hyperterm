@@ -33,6 +33,8 @@ export default class Term extends Component {
     this.term.prefs_.set('color-palette-overrides', props.colors);
     this.term.prefs_.set('user-css', this.getStylesheet(props.customCSS));
     this.term.prefs_.set('scrollbar-visible', false);
+    console.log('audiblebell ');
+    console.log(props.audibleBell);
 
     this.term.onTerminalReady = () => {
       const io = this.term.io.push();
@@ -41,6 +43,9 @@ export default class Term extends Component {
         if (cols !== this.props.cols || rows !== this.props.rows) {
           props.onResize(cols, rows);
         }
+
+      // bell on by default if not defined in the config
+      this.term.bellAudio_.muted = (props.audibleBell == false);
       };
     };
     this.term.decorate(this.refs.term);
@@ -148,6 +153,11 @@ export default class Term extends Component {
 
     if (this.props.customCSS !== nextProps.customCSS) {
       this.term.prefs_.set('user-css', this.getStylesheet(nextProps.customCSS));
+    }
+
+    if (this.props.audibleBell !== nextProps.audibleBell) {
+      if (this.term.bellAudio_)
+        this.term.bellAudio_.muted = (nextProps.audibleBell == false);
     }
   }
 
