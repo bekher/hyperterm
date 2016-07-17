@@ -46,7 +46,10 @@ module.exports = {
       '#cc00ff',
       '#00ffff',
       '#ffffff'
-    ]
+    ],
+
+    // enable audible bell
+    audibleBell: true,
   },
 
   // a list of plugins to fetch and install from npm
