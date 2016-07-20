@@ -7,7 +7,6 @@ export default class Term extends Component {
 
   constructor (props) {
     super(props);
-    this.state = { scrollable: false };
     this.onWheel = this.onWheel.bind(this);
     this.onScrollEnter = this.onScrollEnter.bind(this);
     this.onScrollLeave = this.onScrollLeave.bind(this);
@@ -26,6 +25,7 @@ export default class Term extends Component {
 
     this.term.prefs_.set('font-family', props.fontFamily);
     this.term.prefs_.set('font-size', props.fontSize);
+    this.term.prefs_.set('font-smoothing', props.fontSmoothing);
     this.term.prefs_.set('cursor-color', props.cursorColor);
     this.term.prefs_.set('enable-clipboard-notice', false);
     this.term.prefs_.set('foreground-color', props.foregroundColor);
@@ -35,6 +35,9 @@ export default class Term extends Component {
     this.term.prefs_.set('scrollbar-visible', false);
     this.term.prefs_.set('audible-bell-sound', (props.audibleBell == false) ? '' 
                          : 'lib-resource:hterm/audio/bell');
+    this.term.prefs_.set('receive-encoding', 'raw');
+    this.term.prefs_.set('send-encoding', 'raw');
+    this.term.prefs_.set('alt-sends-what', 'browser-key');
 
     this.term.onTerminalReady = () => {
       const io = this.term.io.push();
@@ -76,7 +79,7 @@ export default class Term extends Component {
 
   write (data) {
     requestAnimationFrame(() => {
-      this.term.io.print(data);
+      this.term.io.writeUTF8(data);
     });
   }
 
@@ -86,6 +89,41 @@ export default class Term extends Component {
 
   clear () {
     this.term.clearPreserveCursorRow();
+
+    // If cursor is still not at the top, a command is probably
+    // running and we'd like to delete the whole screen.
+    // Move cursor to top
+    if (this.term.getCursorRow() !== 0) {
+      this.term.io.writeUTF8('\x1B[0;0H\x1B[2J');
+    }
+  }
+
+  moveWordLeft () {
+    this.term.onVTKeystroke('\x1bb');
+  }
+
+  moveWordRight () {
+    this.term.onVTKeystroke('\x1bf');
+  }
+
+  deleteWordLeft () {
+    this.term.onVTKeystroke('\x1b\x7f');
+  }
+
+  deleteWordRight () {
+    this.term.onVTKeystroke('\x1bd');
+  }
+
+  deleteLine () {
+    this.term.onVTKeystroke('\x1bw');
+  }
+
+  moveToStart () {
+    this.term.onVTKeystroke('\x01');
+  }
+
+  moveToEnd () {
+    this.term.onVTKeystroke('\x05');
   }
 
   getTermDocument () {
@@ -140,6 +178,10 @@ export default class Term extends Component {
       this.term.prefs_.set('font-family', nextProps.fontFamily);
     }
 
+    if (this.props.fontSmoothing !== nextProps.fontSmoothing) {
+      this.term.prefs_.set('font-smoothing', props.fontSmoothing);
+    }
+
     if (this.props.cursorColor !== nextProps.cursorColor) {
       this.term.prefs_.set('cursor-color', nextProps.cursorColor);
     }
@@ -160,8 +202,6 @@ export default class Term extends Component {
   }
 
   componentWillUnmount () {
-    const iframeWindow = this.getTermDocument().defaultView;
-    iframeWindow.addEventListener('wheel', this.onWheel);
     clearTimeout(this.scrollbarsHideTimer);
     this.props.ref_(null);
   }
@@ -182,12 +222,11 @@ export default class Term extends Component {
               width: '100%',
               height: '100%'
             }}></webview>
-        : null
+        : <div
+            className={ css('scrollbarShim') }
+            onMouseEnter={ this.onScrollEnter }
+            onMouseLeave={ this.onScrollLeave } />
       }
-      <div
-        className={ css('scrollbarShim') }
-        onMouseEnter={ this.onScrollEnter }
-        onMouseLeave={ this.onScrollLeave } />
       { this.props.customChildren }
     </div>;
   }

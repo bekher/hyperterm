@@ -38,13 +38,14 @@ config.subscribe(() => {
 });
 
 // initialize communication with main electron process
-// and subscribe to all user intents for example from menues
+// and subscribe to all user intents for example from menus
 rpc.on('ready', () => {
   store_.dispatch(init());
+  store_.dispatch(uiActions.setFontSmoothing());
 });
 
-rpc.on('session add', ({ uid, shell }) => {
-  store_.dispatch(sessionActions.addSession(uid, shell));
+rpc.on('session add', ({ uid, shell, pid }) => {
+  store_.dispatch(sessionActions.addSession(uid, shell, pid));
 });
 
 rpc.on('session data', ({ uid, data }) => {
@@ -97,6 +98,10 @@ rpc.on('preferences', () => {
 
 rpc.on('update available', ({ releaseName, releaseNotes }) => {
   store_.dispatch(updaterActions.updateAvailable(releaseName, releaseNotes));
+});
+
+rpc.on('move', () => {
+  store_.dispatch(uiActions.windowMove());
 });
 
 const app = render(
