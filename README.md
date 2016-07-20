@@ -4,6 +4,12 @@
 
 For downloads, documentation and the developer API head to: https://hyperterm.org
 
+(NOTE: only on macOS) With [Homebrew](http://brew.sh/) and [Homebrew Cask](https://caskroom.github.io/) installed, you can run this command:
+
+```bash
+$ brew cask install hyperterm
+```
+
 ### Repositories
 
 - Art: https://github.com/zeit/hyperterm-art
@@ -26,7 +32,7 @@ to the app are detected.
 ```bash
 $ cd app/
 $ npm install
-$ webpack --watch
+$ npm run dev
 ```
 
 Then you can run in the main directory:
