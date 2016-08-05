@@ -59,7 +59,7 @@ const initial = Immutable({
   },
   foregroundColor: '#fff',
   backgroundColor: '#000',
-  audibleBell: true,
+  bellSoundURL: 'lib-resource:hterm/audio/bell',
   updateVersion: null,
   updateNotes: null
 });
@@ -123,8 +123,8 @@ const reducer = (state = initial, action) => {
           }
         }
 
-        if (null != config.audibleBell) {
-          ret.audibleBell = config.audibleBell;
+        if (null != config.bellSoundURL) {
+          ret.bellSoundURL = config.bellSoundURL;
         }
 
         return ret;

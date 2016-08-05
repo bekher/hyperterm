@@ -135,7 +135,7 @@ export default class Terms extends Component {
             colors: this.props.colors,
             url: session.url,
             cleared: session.cleared,
-            audibleBell: this.props.audibleBell,
+            bellSoundURL: this.props.bellSoundURL,
             onResize: this.bind(this.props.onResize, null, uid),
             onTitle: this.bind(this.props.onTitle, null, uid),
             onData: this.bind(this.props.onData, null, uid),

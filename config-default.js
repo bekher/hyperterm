@@ -48,8 +48,9 @@ module.exports = {
       '#ffffff'
     ],
 
-    // enable audible bell
-    audibleBell: true,
+    // set hterm audible bell path, default is 'lib-resource:hterm/audio/bell'
+    // if left empty, the audible bell will not ring
+    bellSoundURL: 'lib-resource:hterm/audio/bell',
 
     // the shell to run when spawning a new session (i.e. /usr/local/bin/fish)
     // if left empty, your system's login shell will be used by default

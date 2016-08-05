@@ -30,7 +30,7 @@ const TermsContainer = connect(
       colors: state.ui.colors,
       foregroundColor: state.ui.foregroundColor,
       backgroundColor: state.ui.backgroundColor,
-      audibleBell: state.ui.audibleBell
+      bellSoundURL: state.ui.bellSoundURL
     };
   },
   (dispatch) => {

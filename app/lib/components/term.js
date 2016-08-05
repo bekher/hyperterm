@@ -33,8 +33,7 @@ export default class Term extends Component {
     this.term.prefs_.set('color-palette-overrides', props.colors);
     this.term.prefs_.set('user-css', this.getStylesheet(props.customCSS));
     this.term.prefs_.set('scrollbar-visible', false);
-    this.term.prefs_.set('audible-bell-sound', (props.audibleBell == false) ? '' 
-                         : 'lib-resource:hterm/audio/bell');
+    this.term.prefs_.set('audible-bell-sound', props.bellSoundURL);
     this.term.prefs_.set('receive-encoding', 'raw');
     this.term.prefs_.set('send-encoding', 'raw');
     this.term.prefs_.set('alt-sends-what', 'browser-key');
@@ -194,10 +193,8 @@ export default class Term extends Component {
       this.term.prefs_.set('user-css', this.getStylesheet(nextProps.customCSS));
     }
 
-    if (this.props.audibleBell !== nextProps.audibleBell) {
-      this.term.prefs_.set('audible-bell-sound', 
-                           (nextProps.audibleBell == false) ? ''
-                           : 'lib-resource:hterm/audio/bell');
+    if (this.props.bellSoundURL !== nextProps.bellSoundURL) {
+      this.term.prefs_.set('audible-bell-sound', nextProps.bellSoundURL);
     }
   }
 
